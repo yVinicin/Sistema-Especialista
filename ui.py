@@ -1,14 +1,5 @@
 import streamlit as st
-import base64
 from main import executar_diagnostico, formatar_diagnostico_para_usuario
-
-# Função para codificar imagem em base64
-def get_base64_image(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode()
-
-# Carregar imagem de fundo (removido para evitar erro)
-# bg_image = get_base64_image("../pngwing.com (1).png")
 
 # Aplicar CSS simples
 st.markdown(
@@ -25,13 +16,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("Sistema Especialista: Diagnóstico da Luz de Painel de Carros Flex")
-st.markdown("**Clique na luzse estiver acesa no painel do seu carro.**")
+st.title("Sistema Especialista: Diagnóstico da Luzes de Painel de Carros Flex")
+st.markdown("**Clique na luz que estiver acesa no painel do seu carro.**")
 st.markdown("---")
-
-# Simulação visual do painel de carro
-st.header("Painel de Controle do Carro")
-st.write("Selecione a luz piscando ou acesa:")
 
 # Layout simples para bateria
 st.markdown("### Bateria")
@@ -41,15 +28,7 @@ luzes_acesas = {
     'bateria': bateria
 }
 
-# Sintomas adicionais
-st.header("Sintomas Adicionais")
-st.write("Marque se houver outros sintomas:")
 
-sintomas = {
-    'dificuldade_ligar': st.checkbox("Dificuldade para ligar")
-}
-
-sintomas_adicionais = sintomas
 
 # Inicializar estado da sessão
 if 'pergunta_atual' not in st.session_state:
