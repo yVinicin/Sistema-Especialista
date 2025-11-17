@@ -4,12 +4,10 @@ class LuzesPainel(Fact):
     """Fato que representa as luzes acesas no painel do carro."""
     pass
 
-class SintomasAdicionais(Fact):
-    """Fato para sintomas adicionais como dificuldade para ligar."""
-    pass
+
 
 class Diagnostico(KnowledgeEngine):
-    """Motor de inferência para diagnosticar problemas com base na luz da bateria e sintomas adicionais."""
+    """Motor de inferência para diagnosticar problemas com base na luz da bateria."""
 
     @Rule(LuzesPainel(bateria=True), salience=9)
     def luz_bateria(self):
@@ -23,7 +21,4 @@ class Diagnostico(KnowledgeEngine):
         ]
         self.declare(Fact(acao="A luz da bateria acendeu! Isso significa problema na parte elétrica. Faça assim:", prioridade="media", explicacao="Essa luz avisa quando a bateria ou o sistema de carregamento está com problema. Sem eletricidade, o carro não funciona!", passos=passos))
 
-    @Rule(LuzesPainel(bateria=True), SintomasAdicionais(dificuldade_ligar=True), salience=9)
-    def bateria_dificuldade_ligar(self):
-        """Bateria com dificuldade para ligar com linguagem simples."""
-        self.declare(Fact(acao="Sua bateria está fraca ou descarregada. Tente carregar com um carregador externo ou trocar a bateria. Verifique se o alternador está funcionando.", prioridade="alta", explicacao="Esse sintoma confirma que tem problema na parte elétrica, talvez na bateria ou no sistema que carrega ela."))
+

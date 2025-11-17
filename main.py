@@ -1,11 +1,10 @@
-from rules import Diagnostico, LuzesPainel, SintomasAdicionais
+from rules import Diagnostico, LuzesPainel
 from experta import Fact
 
-def executar_diagnostico(luzes_acesas, sintomas_adicionais=None):
+def executar_diagnostico(luzes_acesas):
     """
-    Executa o diagnóstico baseado na luz da bateria acesa e sintomas adicionais.
+    Executa o diagnóstico baseado na luz da bateria acesa.
     luzes_acesas: dicionário com chave 'bateria' booleana (ex.: {'bateria': True})
-    sintomas_adicionais: dicionário opcional com sintomas extras (ex.: {'dificuldade_ligar': True})
     Retorna uma lista de dicionários com ações, prioridades e explicações.
     """
     engine = Diagnostico()
@@ -14,9 +13,7 @@ def executar_diagnostico(luzes_acesas, sintomas_adicionais=None):
     # Declarar fatos baseados nas luzes acesas
     engine.declare(LuzesPainel(**luzes_acesas))
 
-    # Declarar sintomas adicionais se fornecidos
-    if sintomas_adicionais:
-        engine.declare(SintomasAdicionais(**sintomas_adicionais))
+
 
     # Executar inferência
     engine.run()
@@ -68,7 +65,6 @@ def formatar_diagnostico_para_usuario(diagnosticos):
 if __name__ == "__main__":
     # Exemplo de uso direto (para testes)
     luzes_exemplo = {'bateria': True}
-    sintomas_exemplo = {'dificuldade_ligar': True}
-    diagnosticos = executar_diagnostico(luzes_exemplo, sintomas_exemplo)
+    diagnosticos = executar_diagnostico(luzes_exemplo)
     print("Diagnósticos recomendados:")
     print(formatar_diagnostico_para_usuario(diagnosticos))
