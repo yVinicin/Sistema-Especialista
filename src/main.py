@@ -1,12 +1,19 @@
 from regras import *
+from interface import Interface
+import tkinter as tk
 
-""" ----------------------- Função Principal ----------------------- """
-if __name__ == "__main__":
+def reiniciar():
     engine = SistemaEspecialista()
+    engine.gui = gui
     engine.reset()
-
-    print("=== SISTEMA ESPECIALISTA ===")
-    tipo = input("Qual luz acendeu? (bateria/oleo/temperatura/freio/cinto): ")
-
-    engine.declare(Luz(tipo=tipo))
+    engine.declare(Luz(tipo=gui.escolha))
     engine.run()
+    gui.escolha = None
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    
+    gui = Interface(root)
+    root.bind("<<EscolhaConcluida>>", lambda e: reiniciar())
+
+    root.mainloop()
