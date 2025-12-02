@@ -488,7 +488,7 @@ class SistemaEspecialista(KnowledgeEngine):
         self.gui.mostrar("Diagnóstico: Provável falha no sensor ou na trava elétrica de uma porta.")
         self.gui.mostrar("Instrução: Leve o veículo a uma oficina para diagnóstico e reparo do sistema.")
         self.halt()
-    
+        
     @Rule(Porta(fechamento="sim"), Porta(persistencia="nao"))
     def porta_normal(self):
         """Caso o aviso não persista, o sistema está normal."""
