@@ -482,12 +482,19 @@ class SistemaEspecialista(KnowledgeEngine):
         )
         self.declare(Porta(persistencia=resp))
 
-    @Rule(Porta(persistencia="sim"))
-    def porta_falha_sensor_trava(self):
-        """Diagnóstico: Provável falha no sensor ou na trava elétrica de uma porta."""
+    @Rule(Porta(fechamento="sim"), Porta(persistencia="sim"))
+    def porta_falha_sensor(self):
+        """Diagnóstico de provável falha no sensor ou trava elétrica."""
         self.gui.mostrar("Diagnóstico: Provável falha no sensor ou na trava elétrica de uma porta.")
-        self.gui.mostrar("Instrução: Leve o veículo a uma oficina para diagnóstico e reparo do sistema.")
+        self.gui.mostrar("Ação: Leve o veículo a uma oficina para diagnóstico e reparo do sistema.")
         self.halt()
+
+    @Rule(Porta(fechamento="sim"), Porta(persistencia="nao"))
+    def porta_normal(self):
+        """Caso o aviso não persista, o sistema está normal."""
+        self.gui.mostrar("O aviso apagou com tudo fechado. Sistema funcionando normalmente.")
+        self.halt()
+
 
     # ===========================================================================
     # 12. LUZ DO FREIO DE MÃO 
