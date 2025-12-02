@@ -10,58 +10,58 @@ class Luz(Fact):
 # Fatos específicos para cada diagnóstico.
 class Bateria(Fact):
     """Fatos relacionados ao diagnóstico da luz da Bateria."""
-    cabos = Field(str, default=None) # 'soltos', 'zinabre', 'ok'
-    fusivel = Field(str, default=None) # 'nao_sabe', 'ok'
-    movimento = Field(str, default=None) # 'sim', 'nao'
+    cabos = Field(str) # 'soltos', 'zinabre', 'ok'
+    fusivel = Field(str) # 'nao_sabe', 'ok'
+    movimento = Field(str) # 'sim', 'nao'
 
 class Oleo(Fact):
     """Fatos relacionados ao diagnóstico da luz do Óleo."""
-    nivel = Field(str, default=None) # 'sim', 'nao'
+    nivel = Field(str) # 'sim', 'nao'
 
 class Temperatura(Fact):
     """Fatos relacionados ao diagnóstico da luz da Temperatura."""
-    nivel = Field(str, default=None) # 'sim', 'nao'
+    nivel = Field(str) # 'sim', 'nao'
 
 class Freio(Fact):
     """Fatos relacionados ao diagnóstico da luz do Freio."""
-    mao = Field(str, default=None) # 'puxado', 'solto'
-    pedal = Field(str, default=None) # 'fofo', 'normal'
-    fluido = Field(str, default=None) # 'sim', 'nao'
-    pastilha = Field(str, default=None) # 'sim', 'nao'
+    mao = Field(str) # 'puxado', 'solto'
+    pedal = Field(str) # 'fofo', 'normal'
+    fluido = Field(str) # 'sim', 'nao'
+    pastilha = Field(str) # 'sim', 'nao'
 
 class Cinto(Fact):
     """Fatos relacionados ao diagnóstico da luz do Cinto de Segurança."""
-    ocupantes = Field(str, default=None) # 'sim', 'nao'
-    objetos = Field(str, default=None) # 'sim', 'nao'
+    ocupantes = Field(str) # 'sim', 'nao'
+    objetos = Field(str) # 'sim', 'nao'
 
 class CombustivelBaixo(Fact):
     """Fatos relacionados ao diagnóstico da luz de Combustível Baixo."""
-    verificacao = Field(str, default=None) # 'sim', 'nao'
+    verificacao = Field(str) # 'sim', 'nao'
 
 class Flex(Fact):
     """Fatos relacionados ao diagnóstico da luz Flex."""
-    mistura = Field(str, default=None) # 'sim', 'nao'
+    mistura = Field(str) # 'sim', 'nao'
 
 class Airbag(Fact):
     """Fatos relacionados ao diagnóstico da luz do Airbag."""
-    colisao = Field(str, default=None) # 'sim', 'nao'
+    colisao = Field(str) # 'sim', 'nao'
 
 class FarolAlto(Fact):
     """Fatos relacionados ao diagnóstico da luz do Farol Alto."""
-    estado = Field(str, default=None) # 'sim', 'nao'
+    estado = Field(str) # 'sim', 'nao'
 
 class Seta(Fact):
     """Fatos relacionados ao diagnóstico da luz da Seta/Pisca."""
-    lanternas = Field(str, default=None) # 'sim', 'nao'
+    lanternas = Field(str) # 'sim', 'nao'
 
 class Porta(Fact):
     """Fatos relacionados ao diagnóstico da luz de Porta Aberta."""
-    fechamento = Field(str, default=None) # 'sim', 'nao'
-    persistencia = Field(str, default=None) # 'sim', 'nao'
+    fechamento = Field(str) # 'sim', 'nao'
+    persistencia = Field(str) # 'sim', 'nao'
 
 class FreioMao(Fact):
     """Fatos relacionados ao diagnóstico da luz do Freio de Mão."""
-    acionado = Field(str, default=None) # 'sim', 'nao'
+    acionado = Field(str) # 'sim', 'nao'
 
 """ ----------------------- Sistema Especialista ----------------------- """
 
