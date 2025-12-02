@@ -24,11 +24,18 @@ class Interface:
         self.escolha = None
 
         self.regioes = {
-            "bateria":      (850, 110, 900, 150),
-            "oleo":         (95, 260, 170, 305),
-            "temperatura":  (470, 340, 520, 390),
-            "freio":        (640, 190, 690, 230),
-            "cinto":        (750, 110, 790, 150),
+            "bateria":            (850, 110, 900, 150),
+            "oleo":               (95, 260, 170, 305),
+            "temperatura":        (470, 340, 520, 390),
+            "freio":              (525, 335, 580, 385),
+            "cinto":              (750, 110, 790, 150),
+            "combustivel-baixo":  (440, 415, 475, 460),
+            "flex":               (805, 275, 860, 315),
+            "airbag":             (585, 190, 625, 235),
+            "farol-alto":         (175, 100, 225, 145),
+            "seta":               (375, 30, 435, 70),
+            "porta":              (325, 415, 365, 465),
+            "freio-mao":          (630, 180, 685, 230)
         }
 
         # Cria áreas invisíveis clicáveis
@@ -52,7 +59,6 @@ class Interface:
     # Quando o usuário clica sobre uma região da imagem
     def _selecionar(self, valor):
         self.escolha = valor
-        print(self.escolha)
         self.master.event_generate("<<EscolhaConcluida>>")
 
     # Mostra caixa de pergunta com botões
