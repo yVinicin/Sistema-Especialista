@@ -5,9 +5,9 @@ from PIL import Image, ImageTk
 class Interface:
     def __init__(self, master):
         self.master = master
-        self.master.title("Sistema Especialista – Luzes do Painel")
+        self.master.title("Trabalho de Inteligência Artificial (Sistema Especialista) – Luzes do Painel de Carros")
 
-        self.imagem = Image.open("luzes_painel_carro.jpg")
+        self.imagem = Image.open("1_luzes_painel_carro.png")
         self.imgtk = ImageTk.PhotoImage(self.imagem)
 
         # Canvas para exibir a imagem
@@ -23,19 +23,20 @@ class Interface:
         # Onde será armazenada a escolha da luz
         self.escolha = None
 
+        # x += 125 y += 70
         self.regioes = {
-            "bateria":            (850, 110, 900, 150),
-            "oleo":               (95, 260, 170, 305),
-            "temperatura":        (470, 340, 520, 390),
-            "freio":              (525, 335, 580, 385),
-            "cinto":              (750, 110, 790, 150),
-            "combustivel-baixo":  (440, 415, 475, 460),
-            "flex":               (805, 275, 860, 315),
-            "airbag":             (585, 190, 625, 235),
-            "farol-alto":         (175, 100, 225, 145),
-            "seta":               (375, 30, 435, 70),
-            "porta":              (325, 415, 365, 465),
-            "freio-mao":          (630, 180, 685, 230)
+            "bateria":            (200, 340, 255, 385),
+            "oleo":               (65, 270, 150, 315),
+            "temperatura":        (900, 330, 950, 380),
+            "freio":              (290, 80, 375, 150),
+            "cinto":              (865, 260, 920, 310),
+            "combustivel-baixo":  (770, 335, 810, 380),
+            "flex":               (450, 205, 545, 265),
+            "airbag":             (190, 280, 235, 325),
+            "farol-alto":         (40, 340, 100, 385),
+            "seta":               (445, 80, 555, 155),
+            "porta":              (800, 265, 840, 315),
+            "freio-mao":          (625, 85, 710, 150)
         }
 
         # Cria áreas invisíveis clicáveis
@@ -66,6 +67,7 @@ class Interface:
         janela = tk.Toplevel(self.master)
         janela.title("Pergunta")
 
+        # --- Widgets ---
         tk.Label(janela, text=texto, font=("Arial", 12)).pack(pady=10)
 
         resposta = {"valor": None}
@@ -80,6 +82,23 @@ class Interface:
                 command=lambda v=op: escolher(v)
             ).pack(pady=3, fill="x")
 
+        # --- Centralizar a janela ---
+        janela.update_idletasks()  # Atualiza tamanho da janela
+
+        largura = janela.winfo_width()
+        altura = janela.winfo_height()
+
+        # Tamanho da tela
+        largura_tela = self.master.winfo_width()
+        altura_tela = self.master.winfo_height()
+
+        # Cálculo da posição
+        x = self.master.winfo_x() + (largura_tela // 2) - (largura // 2)
+        y = self.master.winfo_y() + (altura_tela // 2) - (altura // 2)
+
+        janela.geometry(f"{largura}x{altura}+{x}+{y}")
+
+        # --- Modal ---
         janela.grab_set()
         janela.wait_window()
         return resposta["valor"]
