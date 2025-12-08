@@ -7,7 +7,7 @@ class Interface:
         self.master = master
         self.master.title("Trabalho de Inteligência Artificial (Sistema Especialista) – Luzes do Painel de Carros")
 
-        self.imagem = Image.open("1_luzes_painel_carro.png")
+        self.imagem = Image.open("interface.jpg")
         self.imgtk = ImageTk.PhotoImage(self.imagem)
 
         # Canvas para exibir a imagem
