@@ -25,18 +25,19 @@ class Interface:
 
         # x += 125 y += 70
         self.regioes = {
-            "bateria":            (200, 340, 255, 385),
-            "oleo":               (65, 270, 150, 315),
-            "temperatura":        (900, 330, 950, 380),
-            "freio":              (290, 80, 375, 150),
-            "cinto":              (865, 260, 920, 310),
-            "combustivel-baixo":  (770, 335, 810, 380),
-            "flex":               (450, 205, 545, 265),
-            "airbag":             (190, 280, 235, 325),
-            "farol-alto":         (40, 340, 100, 385),
-            "seta":               (445, 80, 555, 155),
-            "porta":              (800, 265, 840, 315),
-            "freio-mao":          (625, 85, 710, 150)
+            "bateria":            (530, 590, 575, 625),
+            "oleo":               (875, 625, 940, 660),
+            "temperatura":        (435, 360, 480, 395),
+            "freio":              (500, 435, 545, 465),
+            "cinto":              (415, 580, 460, 625),
+            "combustivel-baixo":  (440, 500, 475, 540),
+            "flex":               (475, 585, 525, 625),
+            "airbag":             (485, 275, 520, 320),
+            "farol-alto":         (50, 625, 95, 655),
+            "seta-esq":           (290, 310, 345, 360),
+            "seta-dir":           (650, 315, 710, 360),
+            "porta":              (595, 360, 630, 390),
+            "freio-mao":          (450, 430, 495, 465)
         }
 
         # Cria áreas invisíveis clicáveis
@@ -59,8 +60,11 @@ class Interface:
 
     # Quando o usuário clica sobre uma região da imagem
     def _selecionar(self, valor):
+        if valor in ("seta-esq", "seta-dir"):
+            valor = "seta"
         self.escolha = valor
         self.master.event_generate("<<EscolhaConcluida>>")
+
 
     # Mostra caixa de pergunta com botões
     def perguntar(self, texto, opcoes):
