@@ -195,7 +195,7 @@ class SistemaEspecialista(KnowledgeEngine):
     @Rule(Temperatura(nivel="sim"))
     def temperatura_completar_vazamento(self):
         """Instrução para completar a água e procurar vazamentos."""
-        self.gui.mostrar("Ação: Complete com água (com motor frio e com o veículo funcionando) e procure vazamentos.")
+        self.gui.mostrar("Ação: Complete com água ou fluído de arrefecimento (com motor frio e com o veículo funcionando) conforme indicado pelo fabricante e procure vazamentos.")
         self.gui.mostrar("Instrução Adicional: Se tiver vazamentos, deverá levar para uma mecânica para analisar a situação (mangueiras, juntas, vedadores).")
         self.halt()
 
@@ -348,7 +348,7 @@ class SistemaEspecialista(KnowledgeEngine):
         self.halt()
 
     # ===========================================================================
-    # 7. LUZ FLEX
+    # 7. LUZ DE INJEÇÃO (COMPLETA)
     # ===========================================================================
 
     @Rule(Luz(tipo="flex"), NOT(Flex(mistura=W())))
@@ -360,19 +360,123 @@ class SistemaEspecialista(KnowledgeEngine):
         )
         self.declare(Flex(mistura=resp))
 
+    # Caso 1 — MISTURA DE COMBUSTÍVEL
     @Rule(Flex(mistura="sim"))
     def flex_recalibracao(self):
         """Diagnóstico: Central em recalibração."""
-        self.gui.mostrar("Diagnóstico: A central ainda está recalibrando a mistura do combustível.")
+        self.gui.mostrar("Diagnóstico: A central está recalibrando a mistura do combustível.")
         self.gui.mostrar("Instrução: Rode por alguns quilômetros para o módulo ajustar automaticamente.")
         self.halt()
 
+    # CASO 2 — NÃO HOUVE MISTURA: INVESTIGAÇÃO COMPLETA
     @Rule(Flex(mistura="nao"))
-    def flex_falha_sensor(self):
-        """Diagnóstico: Sensor de etanol (ESensor) com falha."""
-        self.gui.mostrar("Diagnóstico: Sensor de etanol (ESensor) com falha.")
-        self.gui.mostrar("Instrução: Levar a uma mecânica para verificar o sensor ou atualizações da ECU.")
+    def flex_investigar(self):
+        """Pergunta sobre sintomas adicionais."""
+        resp = self.gui.perguntar(
+            "O carro está falhando, engasgando ou com marcha lenta irregular?",
+            ["sim", "nao"]
+        )
+        self.declare(Fact(falhando=resp))
+
+    # Falhando → investigar ignição
+    @Rule(Fact(falhando="sim"))
+    def flex_falhando(self):
+        """Pergunta sobre sintomas de falha de ignição."""
+        resp = self.gui.perguntar(
+            "A falha ocorre mais forte ao acelerar?",
+            ["sim", "nao"]
+        )
+        self.declare(Fact(falha_acelerar=resp))
+
+    @Rule(Fact(falhando="sim"), Fact(falha_acelerar="sim"))
+    def flex_bobina_vela(self):
+        """Diagnóstico: Bobina ou velas."""
+        self.gui.mostrar("Diagnóstico: Possível falha na bobina de ignição ou velas de ignição.")
+        self.gui.mostrar("Instrução: Leve a uma mecânica para verificar faísca, cabos, velas e bobina.")
         self.halt()
+
+    # Falhando, mas não apenas acelerando → sensor MAP/MAF ou corpo de borboleta
+    @Rule(Fact(falhando="sim"), Fact(falha_acelerar="nao"))
+    def flex_marcha_lenta_irregular(self):
+        """Pergunta sobre corpo de borboleta."""
+        resp = self.gui.perguntar(
+            "A marcha lenta sobe e desce sozinha?",
+            ["sim", "nao"]
+        )
+        self.declare(Fact(oscilando=resp))
+
+    @Rule(Fact(oscilando="sim"))
+    def flex_corpo_borboleta(self):
+        """Diagnóstico: Corpo de borboleta ou IAC."""
+        self.gui.mostrar("Diagnóstico: Corpo de borboleta sujo ou atuador de marcha lenta (IAC) com defeito.")
+        self.gui.mostrar("Instrução: Leve a uma mecânica para realizar uma limpeza do corpo de borboleta e adaptação no scanner.")
+        self.halt()
+
+    @Rule(Fact(oscilando="nao"))
+    def flex_sensor_map(self):
+        """Diagnóstico: Sensor MAP/MAF."""
+        self.gui.mostrar("Diagnóstico: Possível falha no sensor MAP/MAF.")
+        self.gui.mostrar("Instrução: Leve a uma oficina para teste de pressão e leitura do sensor com scanner.")
+        self.halt()
+
+    # Se NÃO está falhando → investigar combustível e bomba
+    @Rule(Fact(falhando="nao"))
+    def flex_sem_falha(self):
+        """Pergunta sobre combustível suspeito."""
+        resp = self.gui.perguntar(
+            "Você abasteceu em um posto DUVIDOSO recentemente?",
+            ["sim", "nao"]
+        )
+        self.declare(Fact(comb_suspeito=resp))
+
+    @Rule(Fact(comb_suspeito="sim"))
+    def flex_combustivel_ruim(self):
+        """Diagnóstico: Combustível adulterado."""
+        self.gui.mostrar("Diagnóstico: Combustível adulterado ou com excesso de etanol/água.")
+        self.gui.mostrar("Instrução: Rode até quase esvaziar e reabasteça com combustível de boa procedência.")
+        self.gui.mostrar("Se não melhorar: drene o tanque e limpe os bicos injetores.")
+        self.halt()
+
+    @Rule(Fact(comb_suspeito="nao"))
+    def flex_verificar_bomba(self):
+        """Pergunta sobre perda de força."""
+        resp = self.gui.perguntar(
+            "O carro perde força em subidas ou acima de 80 km/h?",
+            ["sim", "nao"]
+        )
+        self.declare(Fact(perdendo_forca=resp))
+
+    @Rule(Fact(perdendo_forca="sim"))
+    def flex_bomba_fraca(self):
+        """Diagnóstico: Bomba fraca ou filtro obstruído."""
+        self.gui.mostrar("Diagnóstico: Bomba de combustível fraca ou filtro de combustível obstruído.")
+        self.gui.mostrar("Instrução: Leve a uma mecânica para medir a pressão da linha no scanner/manômetro e substituir filtro se necessário.")
+        self.halt()
+
+    # Se nada disso → sensores de forma geral
+    @Rule(Fact(perdendo_forca="nao"))
+    def flex_sonda_lambda(self):
+        """Pergunta sobre consumo alto."""
+        resp = self.gui.perguntar(
+            "O consumo aumentou significativamente?",
+            ["sim", "nao"]
+        )
+        self.declare(Fact(consumo_alto=resp))
+
+    @Rule(Fact(consumo_alto="sim"))
+    def flex_sonda_lambda_falha(self):
+        """Diagnóstico: Sonda lambda."""
+        self.gui.mostrar("Diagnóstico: Sonda lambda com falha (mistura rica/pobre).")
+        self.gui.mostrar("Instrução: Teste e substitua se necessário. Caso não saiba como testar leve a uma mecânicapara realiza-los.")
+        self.halt()
+
+    @Rule(Fact(consumo_alto="nao"))
+    def flex_sensor_temperatura(self):
+        """Diagnóstico: Sensor de temperatura do motor."""
+        self.gui.mostrar("Diagnóstico: Sensor de temperatura do motor (CTS) defeituoso.")
+        self.gui.mostrar("Instrução: Leve a uma mecânica para passsar um scanner para verificar e substituir se necessário.")
+        self.halt()
+
 
     # ===========================================================================
     # 8. LUZ DO AIRBAG
