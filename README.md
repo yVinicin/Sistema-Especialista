@@ -37,7 +37,7 @@ Para utilizar o sistema, você precisará do Python instalado.
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/yVinicin/Sistema-Especialista.git](https://github.com/yVinicin/Sistema-Especialista.git)
+    git clone https://github.com/yVinicin/Sistema-Especialista.git
     cd Sistema-Especialista
     ```
 
