@@ -31,7 +31,7 @@ class Interface:
             "freio":              (500, 435, 545, 465),
             "cinto":              (415, 580, 460, 625),
             "combustivel-baixo":  (440, 500, 475, 540),
-            "flex":               (475, 585, 525, 625),
+            "injecao":            (475, 585, 525, 625),
             "airbag":             (485, 275, 520, 320),
             "farol-alto":         (50, 625, 95, 655),
             "seta-esq":           (290, 310, 345, 360),
@@ -62,6 +62,8 @@ class Interface:
     def _selecionar(self, valor):
         if valor in ("seta-esq", "seta-dir"):
             valor = "seta"
+        elif valor == "injecao":
+            valor = "flex"
         self.escolha = valor
         self.master.event_generate("<<EscolhaConcluida>>")
 
